@@ -34,7 +34,7 @@ def test_grade_assignment_cross(client, h_teacher_2):
         headers=h_teacher_2,
         json={
             "id": 1,
-            "grade": "A"
+            "grade": "B"
         }
     )
 
@@ -42,6 +42,22 @@ def test_grade_assignment_cross(client, h_teacher_2):
     data = response.json
 
     assert data['error'] == 'FyleError'
+
+
+def test_grade_assignment(client, h_teacher_2):
+    
+    response = client.post(
+        '/teacher/assignments/grade',
+        headers=h_teacher_2,
+        json={
+            "id": 2,
+            "grade": "A"
+        }
+    )
+
+    assert response.status_code == 200
+    data = response.json
+    assert data['data']['state'] in ['GRADED']
 
 
 def test_grade_assignment_bad_grade(client, h_teacher_1):
@@ -72,7 +88,7 @@ def test_grade_assignment_bad_assignment(client, h_teacher_1):
         headers=h_teacher_1,
         json={
             "id": 100000,
-            "grade": "A"
+            "grade": "B"
         }
     )
 
